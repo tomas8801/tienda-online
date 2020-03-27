@@ -32,7 +32,7 @@
 <div class="total-carrito">
     <?php $stats = Utils::statsCarrito();?>
     <h3>Precio total: <?= $stats['total'] ?> $ </h3>
-    <a href="<?= url_base?>carrito/delete_all" class="button-pedido">Vaciar carrito</a>
+    <a href="<?= url_base?>carrito/delete_all" class="button-delete">Vaciar carrito</a>
     <a href="<?= url_base?>pedido/hacer" class="button-pedido">Hacer pedido</a>
 </div>
 <?php else: ?>

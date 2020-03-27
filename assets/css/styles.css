@@ -1,13 +1,29 @@
+/*FONTS*/
+@import url('https://fonts.googleapis.com/css?family=Merienda+One&display=swap');
+
 /*GENERALES*/
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: sans-serif, Helvetica, Arial;
+    font-family: 'Merienda One', cursive;
+
 }
 body {
-    background: url(../img/background.jpg);
 }
+
+body:before {
+    content: "";
+    position: absolute;
+    background: url(../img/background.jpg);
+    background-size: cover;
+    z-index: -1; /* Keep the background behind the content */
+    height: 100%; 
+    width: 100%; /* Using Glen Maddern's trick /via @mente */
+    filter: blur(8px);
+    -webkit-filter: blur(8px);
+}
+
 a {
     color: #9BCBAF;
     text-decoration: none;
@@ -32,6 +48,7 @@ table {
 td {
     border-top: 1px solid #ccc;
     padding: 2px;
+
 }
 /*CONTAINER*/
 #container {
@@ -42,16 +59,17 @@ td {
 /* HEADER */
 #header {
     width: 100%;
-    height: 160px;
+    height: 100px;
     background: #FFFFFF;
 }
 #logo {
-    padding: 30px;
+    line-height: 100px;
     display: flex;
     align-items: center;
+    margin-left: 20px;
 }
 #logo img {
-    height: 100px;
+    height: 60px;
 }
 #logo a {
     font-size: 30px;
@@ -64,7 +82,7 @@ td {
 }
 /*MENU*/
 #menu {
-    height: 55px;
+    height: 50px;
     background: #222;
     color: white;
     border-bottom: 2px solid #9BCBAF;
@@ -74,17 +92,16 @@ td {
     margin: 0 auto;
     display: flex;
     flex-direction: row;
-    margin-left: 25px;
 }
 #menu ul li {
-    line-height: 55px;
+    line-height: 50px;
 
 }
 #menu a {
     display: block;
     color: white;
-    padding-left: 12px;
-    padding-right: 12px;
+    padding-left: 16px;
+    padding-right: 16px;
     text-decoration: none;
     transition: all 200ms;
 }
@@ -158,11 +175,11 @@ input[type="button"],
 input[type="submit"]{
     width: 100%;
     background: #9BCBAF;
-    padding: 3px;
+    padding: 5px 3px;
     text-transform: uppercase;
-    font-size: 14px;
+    font-size: 12px;
     letter-spacing: 2px;
-    font-weight: bold;
+    font-weight: normal;
     margin-top: 10px;
     color: white;
     cursor: pointer;
@@ -215,9 +232,10 @@ input[type="submit"]:hover{
     box-shadow: -5px -1px 5px #ddd;   
 }
 #central h1 {
-    font-size: 24px;
+    font-size: 27px;
+    font-family: 'Merienda One', cursive;
     text-align: center;
-    font-weight: normal;
+    font-weight: bold;
     letter-spacing: 1px;
     border-bottom: 1px solid #ccc;
     margin-bottom: 20px;
@@ -338,8 +356,20 @@ input[type="submit"]:hover{
     padding: 3px;
     text-align: center;
     text-decoration: none;
+    margin: 0 auto;
 }
 .button-pedido:hover{
     background: #8DB79E;
 }
+.button-delete {
+    display: block;
+    width: 150px;
+    background-color: #b20000c2;
+    color: white !important;
+        padding: 3px;
+    text-align: center;
+    text-decoration: none;
+    margin: 0 auto;
 
+
+}
