@@ -18,7 +18,7 @@ INSERT INTO usuarios VALUES(null, 'Admin', 'Admin', 'admin@admin.com', 'contrase
 CREATE TABLE categorias (
 id      int(255) auto_increment not null,
 nombre  varchar(100) not null,
-CONSTRAINT pk_categorias PRIMARY KEY(id),
+CONSTRAINT pk_categorias PRIMARY KEY(id)
 )ENGINE=InnoDb;
 
 INSERT INTO categorias VALUES(null, 'Pulsera');
@@ -47,7 +47,9 @@ usuario_id int(255) not null,
 provincia  varchar(100) not null,
 localidad varchar(100) not null,
 direccion varchar(255) not null,
-coste float(100, 2) not null,
+cod_postal varchar(20) not null,
+telefono varchar(30) not null,
+monto float(100, 2) not null,
 estado varchar(20) not null,
 fecha date not null,
 hora time,
@@ -56,12 +58,12 @@ CONSTRAINT fk_pedido_usuario FOREIGN KEY(usuario_id) REFERENCES usuarios(id)
 )ENGINE=InnoDb;
 
 
-CREATE TABLE lineas_pedidos (
+CREATE TABLE transacciones (
 id      int(255) auto_increment not null,
 pedido_id int(255) not null,
 producto_id  int(255) not null,
 unidades    int(255) not null,
-CONSTRAINT pk_lineas_pedidos PRIMARY KEY(id),
-CONSTRAINT fk_linea_pedido FOREIGN KEY(pedido_id) REFERENCES pedidos(id),
-CONSTRAINT fk_linea_producto FOREIGN KEY(producto_id) REFERENCES productos(id)
+CONSTRAINT pk_transacciones PRIMARY KEY(id),
+CONSTRAINT fk_transaccion_pedido FOREIGN KEY(pedido_id) REFERENCES pedidos(id),
+CONSTRAINT fk_transaccion_producto FOREIGN KEY(producto_id) REFERENCES productos(id)
 )ENGINE=InnoDb;

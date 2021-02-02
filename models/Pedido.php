@@ -7,7 +7,9 @@ class Pedido {
     private $provincia;
     private $localidad;
     private $direccion;
-    private $coste;
+    private $cod_postal;
+    private $monto;
+    private $telefono;
     private $estado;
     private $fecha;
     private $hora;
@@ -38,8 +40,8 @@ class Pedido {
         return $this->direccion;
     }
 
-    function getCoste() {
-        return $this->coste;
+    function getMonto() {
+        return $this->monto;
     }
 
     function getEstado() {
@@ -52,6 +54,14 @@ class Pedido {
 
     function getHora() {
         return $this->hora;
+    }
+
+    function getCodPostal() {
+        return $this->cod_postal;
+    }
+
+    function getTelefono() {
+        return $this->telefono;
     }
 
     function setId($id) {
@@ -74,8 +84,8 @@ class Pedido {
         $this->direccion = $direccion;
     }
 
-    function setCoste($coste) {
-        $this->coste = $coste;
+    function setMonto($monto) {
+        $this->monto = $monto;
     }
 
     function setEstado($estado) {
@@ -88,6 +98,14 @@ class Pedido {
 
     function setHora($hora) {
         $this->hora = $hora;
+    }
+
+    function setCodPostal($cod) {
+        $this->cod_postal = $cod;
+    }
+
+    function setTelefono($tel) {
+        $this->telefono = $tel;
     }
 
     public function getAll() {
@@ -114,8 +132,7 @@ class Pedido {
     }
     
     public function getOneByUser(){
-        $sql = "SELECT p.id, p.coste, lp.unidades FROM pedidos p "
-                . "INNER JOIN lineas_pedidos lp ON lp.pedido_id = p.id "
+        $sql = "SELECT p.id, p.monto FROM pedidos p "
                 . "WHERE usuario_id = :usuario_id "
                 . "ORDER BY id DESC LIMIT 1";
         $stmt = $this->db->prepare($sql);
@@ -141,30 +158,32 @@ class Pedido {
 //        $sql = "SELECT * FROM productos WHERE id IN "
 //                . "(SELECT producto_id FROM lineas_pedidos WHERE pedido_id={$id})";
         
-        $sql = "SELECT pr.*, lp.unidades FROM productos pr "
-                . "INNER JOIN lineas_pedidos lp ON pr.id = lp.producto_id "
-                . "WHERE lp.pedido_id = {$id}";
+        $sql = "SELECT pr.*, t.unidades FROM productos pr "
+                . "INNER JOIN transacciones t ON pr.id = t.producto_id "
+                . "WHERE t.pedido_id = {$id}";
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
         $productos = $stmt->fetchAll(PDO::FETCH_OBJ);
         
-        //actualizamos el stock del producto restando las unidades pedidas
-        $query = "UPDATE productos pr INNER JOIN lineas_pedidos lp ON pr.id = lp.producto_id SET pr.stock = (pr.stock - lp.unidades) WHERE lp.pedido_id = {$id}"; 
-        $stmt = $this->db->prepare($query);
-        $stmt->execute();
+        // //actualizamos el stock del producto restando las unidades pedidas
+        // $query = "UPDATE productos pr INNER JOIN transacciones t ON pr.id = t.producto_id SET pr.stock = (pr.stock - t.unidades) WHERE t.pedido_id = {$id}"; 
+        // $stmt = $this->db->prepare($query);
+        // $stmt->execute();
 
         return $productos;
     }
 
     public function save() {
-        $sql = "INSERT INTO pedidos VALUES(null, :usuario_id, :provincia, :localidad, :direccion, :coste, 'confirm', CURDATE(), CURTIME())";
+        $sql = "INSERT INTO pedidos VALUES(null, :usuario_id, :provincia, :localidad, :direccion, :cod_postal, :telefono, :monto, 'confirm', CURDATE(), CURTIME())";
         $stmt = $this->db->prepare($sql);
         $stmt->execute(array(
             ':usuario_id' => $this->getUsuario_id(),
             ':provincia' => $this->getProvincia(),
             ':localidad' => $this->getLocalidad(),
             ':direccion' => $this->getDireccion(),
-            ':coste' => $this->getCoste(),
+            ':cod_postal' => $this->getCodPostal(),
+            ':telefono' => $this->getTelefono(),
+            ':monto' => $this->getMonto()
         ));
         $result = false;
         if ($stmt) {
@@ -173,32 +192,7 @@ class Pedido {
         return $result;
     }
     
-    //guardamos la relacion entre el producto y el pedido
-    public function save_linea(){
-        //seleccionamos el id o clave primaria del ultimo registro insertado
-        $sql = "SELECT LAST_INSERT_ID() as 'pedido';";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute();
-        $pedido_id = $stmt->fetch(PDO::FETCH_OBJ)->pedido;
-        
-        foreach ($_SESSION['carrito'] as $elemento){
-            $producto = $elemento['producto'];
-
-            $insert = "INSERT INTO lineas_pedidos VALUES(null, :pedido_id, :producto_id, :unidades)";
-            $stmt = $this->db->prepare($insert);
-            $stmt->execute(array(
-                ':pedido_id' => $pedido_id,
-                ':producto_id' => $producto->id,
-                ':unidades' => $elemento['unidades'],
-            ));
-        }
-
-        $result = false;
-        if ($stmt) {
-            $result = true;
-        }
-        return $result;
-    }
+   
     
     public function edit() {
         $sql = "UPDATE pedidos SET estado = :estado WHERE id = :pedido_id";

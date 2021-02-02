@@ -13,25 +13,26 @@ class pedidoController {
             $provincia = isset($_POST['provincia']) ? $_POST['provincia'] : null;
             $localidad = isset($_POST['localidad']) ? $_POST['localidad'] : null;
             $direccion = isset($_POST['direccion']) ? $_POST['direccion'] : null;
+            $cod_postal = isset($_POST['cod_postal']) ? $_POST['cod_postal'] : null;
+            $telefono = isset($_POST['telefono']) ? $_POST['telefono'] : null;
             $stats = Utils::statsCarrito();
-            $coste = $stats['total'];
+            $monto = $stats['total'];
             
             
-            if ($provincia && $localidad && $direccion) {
+            if ($provincia && $localidad && $direccion && $cod_postal && $telefono) {
                 //guardar datos en bd
                 $pedido = new Pedido();
                 $pedido->setUsuario_id($usuario_id);
                 $pedido->setProvincia($provincia);
                 $pedido->setLocalidad($localidad);
                 $pedido->setDireccion($direccion);
-                $pedido->setCoste($coste);
+                $pedido->setCodPostal($cod_postal);
+                $pedido->setTelefono($telefono);
+                $pedido->setMonto($monto);
                 
                 $save = $pedido->save();
-                
-                //guardar relacion entre pedido y producto
-                $save_linea = $pedido->save_linea();
-                
-                if ($save && $save_linea) {
+       
+                if ($save) {
                     $_SESSION['pedido'] = 'complete';
 
                 }else {
@@ -54,8 +55,8 @@ class pedidoController {
             $pedido->setUsuario_id($identity->id);            
             $pedido = $pedido->getOneByUser();
 
-            $pedido_productos = new Pedido();
-            $productos = $pedido_productos->getProductosByPedido($pedido->id);
+            // $pedido_productos = new Pedido();
+            // $productos = $pedido_productos->getProductosByPedido($pedido->id);
 
         }
         require_once 'views/pedido/confirmado.php';

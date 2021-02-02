@@ -1,3 +1,8 @@
+<?php if( isset($_SESSION['pago_resultado'])) {
+                    echo $_SESSION['pago_resultado'];
+                }
+                Utils::deleteSession('pago_resultado');
+                ?>
 <h1>Algunos de nuestros productos</h1>
 <?php foreach ($productos as $pro): ?>
 
