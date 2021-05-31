@@ -1,0 +1,12 @@
+<IfModule mod_rewrite.c>
+Options -MultiViews
+# Activar rewrite
+RewriteEngine on
+RewriteBase /tienda-online/public/
+# ErrorDocument 404 http://localhost/proyectoTienda/error/
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+
+RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
+</IfModule>
